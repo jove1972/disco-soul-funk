@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Disco Soul Funk</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#2a1308">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Titan+One&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg1:#4b2511; --bg2:#2a1308; --line:#b5611f; --cream:#f6dcb4; --dim:#d9ac76; --or:#ff8a1f; --gold:#ffb52e; --dark:#2a1308;
+  color-scheme:dark; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;color:var(--cream);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.35;
+  background:radial-gradient(ellipse at 50% 0%,var(--bg1),var(--bg2) 75%) fixed}
+main{max-width:920px;margin:0 auto;padding:12px 16px 30px;display:grid;gap:14px}
+.logo{margin:4px 0 2px;display:flex;align-items:center;justify-content:center;font-family:"Titan One","Arial Black",system-ui,sans-serif;font-weight:400;line-height:.88;
+  color:var(--gold);-webkit-text-stroke:7px #4a1c07;paint-order:stroke fill;text-shadow:0 4px 0 #7a2f0a}
+.logo .d{font-size:clamp(40px,10vw,74px)}
+.logo .sf{font-size:clamp(28px,7vw,52px);text-align:left}
+.logo .lp{width:clamp(36px,8vw,60px);aspect-ratio:1;border-radius:50%;margin:0 -8px;flex:none;border:2px solid #000;
+  background:radial-gradient(circle,#ff8a1f 0 20%,#111 21% 100%);box-shadow:0 3px 0 #7a2f0a}
+.panel{border:1.5px solid rgba(181,97,31,.6);border-radius:18px;padding:12px 14px 14px;background:rgba(0,0,0,.18)}
+h2{margin:0 0 10px;text-align:center;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--cream)}
+.srow{display:flex;gap:10px}
+.sbox{flex:1;display:flex;align-items:center;gap:10px;background:rgba(0,0,0,.35);border:1.5px solid var(--line);border-radius:12px;padding:0 12px;min-height:50px}
+.sbox svg{flex:none;color:var(--or)}
+#q{flex:1;min-width:0;background:transparent;border:0;color:var(--gold);font:inherit;font-weight:700;font-size:17px;outline:0}
+#q::placeholder{color:#b9803f;font-weight:600}
+.sbox:focus-within{outline:3px solid var(--gold);outline-offset:2px}
+button,.btn{font:inherit;cursor:pointer;border:0;color:var(--cream);text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+button:focus-visible,.btn:focus-visible,.g:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.add{background:var(--or);color:var(--dark);font-weight:800;border-radius:12px;padding:0 16px;min-height:50px;flex:none}
+.res{list-style:none;margin:10px 0 0;padding:0;max-height:230px;overflow-y:auto;border:1.5px solid var(--line);border-radius:12px;background:rgba(0,0,0,.35)}
+.res li button{width:100%;justify-content:flex-start;text-align:left;background:transparent;padding:10px 14px;min-height:48px;overflow-wrap:anywhere;border-bottom:1px solid rgba(181,97,31,.35)}
+.res li button.cur{color:var(--gold);font-weight:700}
+.res .none,.res .more button{color:var(--dim);padding:12px;text-align:center;width:100%}
+.hide{display:none!important}
+.hint{margin:10px 0 0;color:var(--dim);font-size:14px;text-align:center}
+.stage{position:relative;height:210px;display:grid;place-items:center}
+#cv{position:absolute;inset:0;width:100%;height:100%}
+.vinyl{position:relative;width:190px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;
+  background:repeating-radial-gradient(circle,#0d0d0d 0 3px,#222 3px 5px);box-shadow:0 0 0 4px rgba(255,138,31,.35),0 0 34px 8px rgba(255,138,31,.45)}
+.vinyl.spin{animation:spin 3.2s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.vinyl.spin{animation:none}}
+.lab{width:42%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#111 0 6%,#e8892a 7% 100%);display:grid;place-items:center;text-align:center;color:#3a1706;font-weight:800;font-size:11px;line-height:1.1;padding-top:30%}
+#np{text-align:center;font-weight:800;font-size:18px;color:var(--gold);min-height:28px;overflow-wrap:anywhere;margin:2px 0 8px}
+.bar{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--dim);margin-bottom:10px}
+input[type=range]{flex:1;accent-color:var(--or);height:28px}
+.ctrl{display:flex;justify-content:center;gap:12px;margin-bottom:14px}
+.ctrl button{background:rgba(0,0,0,.35);border:1.5px solid var(--line);border-radius:14px;min-width:56px;min-height:52px;font-size:20px;padding:0 14px}
+.ctrl #play{background:var(--or);color:var(--dark);min-width:72px;border-color:var(--or)}
+.ctrl .on{background:var(--gold);color:var(--dark)}
+.radar{margin:0 auto;display:flex;gap:10px;min-height:56px;padding:0 30px;border-radius:999px;border:2.5px solid var(--or);background:rgba(0,0,0,.35);
+  color:#ffd9a0;font-weight:800;font-size:17px;text-transform:uppercase;box-shadow:0 0 18px rgba(255,138,31,.55)}
+.radar.on{background:var(--or);color:var(--dark)}
+#st{min-height:20px;margin:10px 0 0;text-align:center;color:var(--dim);font-size:14px}
+.gate{display:grid;grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:12px 10px}
+.g{display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:var(--cream);font-weight:700;font-size:13px}
+.tile{width:76px;height:64px;border-radius:14px;background:#f6e6c8;border:2.5px solid #b5611f;display:grid;place-items:center;box-shadow:0 3px 0 #6d3510}
+.tile svg{width:46px;height:46px}
+</style>
+</head>
+<body>
+<main>
+  <h1 class="logo" aria-label="Disco Soul Funk"><span class="d" aria-hidden="true">DISCO</span><span class="lp" aria-hidden="true"></span><span class="sf" aria-hidden="true">SOUL<br>FUNK</span></h1>
+
+  <section class="panel" id="sec">
+    <h2>Recherche locale (<span id="n">0</span> MP3)</h2>
+    <div class="srow">
+      <div class="sbox">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M16 16l5 5"/></svg>
+        <input id="q" type="search" placeholder="Chercher un titre ou un artiste" aria-label="Chercher dans mes MP3" autocomplete="off">
+      </div>
+      <label class="btn add" for="file">Ajouter</label>
+    </div>
+    <ul id="res" class="res hide"></ul>
+    <p class="hint" id="hint">Touchez Ajouter, ouvrez votre carte SD, appuyez longuement sur un fichier, puis « Tout sélectionner ».</p>
+  </section>
+
+  <section class="panel">
+    <h2>Mode d’écoute / reconnaissance</h2>
+    <div class="stage"><canvas id="cv"></canvas><div class="vinyl" id="vinyl"><div class="lab">STUDIO<br>GROOVE</div></div></div>
+    <div id="np">Choisissez un morceau</div>
+    <div class="bar"><span id="t1">0:00</span><input type="range" id="seek" min="0" max="1000" value="0" aria-label="Position"><span id="t2">0:00</span></div>
+    <div class="ctrl">
+      <button id="shuf" aria-label="Lecture aléatoire">🔀</button>
+      <button id="prev" aria-label="Précédent">⏮</button>
+      <button id="play" aria-label="Lecture">▶</button>
+      <button id="next" aria-label="Suivant">⏭</button>
+    </div>
+    <button class="radar" id="radar"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg><span id="rt">Activer le radar</span></button>
+    <p id="st"></p>
+  </section>
+
+  <section class="panel">
+    <h2>Passerelle universelle</h2>
+    <div class="gate">
+      <a class="g" id="g-cd" target="_blank" rel="noopener"><span class="tile"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="21" fill="#e2b23c" stroke="#9a6d12" stroke-width="2"/><circle cx="24" cy="24" r="6" fill="#f6e6c8"/><circle cx="24" cy="24" r="13" fill="none" stroke="#fff3b8" stroke-width="1.5"/></svg></span>CDandLP</a>
+      <a class="g" id="g-di" target="_blank" rel="noopener"><span class="tile"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="#111"/><text x="24" y="28" text-anchor="middle" font-size="10" font-weight="800" fill="#ffd23f" font-family="Arial,sans-serif">Discogs</text></svg></span>Discogs</a>
+      <a class="g" id="g-dz" target="_blank" rel="noopener"><span class="tile"><svg viewBox="0 0 48 48"><rect x="6" y="30" width="7" height="8" fill="#40c4a8"/><rect x="15" y="24" width="7" height="14" fill="#8a4fd6"/><rect x="24" y="16" width="7" height="22" fill="#ff5a3c"/><rect x="33" y="10" width="7" height="28" fill="#ffb52e"/></svg></span>Deezer</a>
+      <a class="g" id="g-sp" target="_blank" rel="noopener"><span class="tile"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="21" fill="#1db954"/><g fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"><path d="M12 18q12-4 24 2"/><path d="M14 26q10-3 20 2"/><path d="M16 33q8-2 15 1"/></g></svg></span>Spotify</a>
+      <a class="g" id="g-yt" target="_blank" rel="noopener"><span class="tile"><svg viewBox="0 0 48 48"><rect x="4" y="11" width="40" height="26" rx="8" fill="#e62117"/><path d="M20 17l11 7-11 7z" fill="#fff"/></svg></span>YouTube</a>
+      <a class="g" id="g-sh" target="_blank" rel="noopener"><span class="tile"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="21" fill="#0f8cff"/><text x="24" y="33" text-anchor="middle" font-size="28" font-weight="800" fill="#fff" font-family="Arial,sans-serif">S</text></svg></span>Shazam</a>
+      <a class="g" id="g-sd" target="_blank" rel="noopener"><span class="tile"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="21" fill="#ff7a1a"/><circle cx="24" cy="24" r="11" fill="none" stroke="#3a1706" stroke-width="5"/></svg></span>SoundHound</a>
+    </div>
+  </section>
+</main>
+<input id="file" type="file" accept="audio/*,.mp3" multiple class="hide">
+<audio id="a" preload="auto"></audio>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)};
+  var a=$('a'),tracks=[],cur=-1,shuffle=false,shown=60,query='',url=null,open=false;
+  var G={'g-cd':['https://www.cdandlp.com/fr/search/?q=','https://www.cdandlp.com/'],
+    'g-di':['https://www.discogs.com/search/?type=all&q=','https://www.discogs.com/'],
+    'g-dz':['https://www.deezer.com/search/','https://www.deezer.com/'],
+    'g-sp':['https://open.spotify.com/search/','https://open.spotify.com/'],
+    'g-yt':['https://www.youtube.com/results?search_query=','https://www.youtube.com/'],
+    'g-sh':[null,'https://www.shazam.com/'],'g-sd':[null,'https://www.soundhound.com/']};
+  function links(){
+    var t=cur>=0?tracks[cur].title:$('q').value.trim(),e=encodeURIComponent(t);
+    for(var id in G){$(id).href=(t&&G[id][0])?G[id][0]+e:G[id][1]}
+  }
+  function clean(n){return n.replace(/\.[^.]+$/,'').replace(/_/g,' ').replace(/^\s*\d{1,3}\s*[-.)]\s*/,'').replace(/\s+/g,' ').trim()}
+  function fmt(s){if(!isFinite(s))return '0:00';var m=Math.floor(s/60),r=Math.floor(s%60);return m+':'+(r<10?'0':'')+r}
+
+  $('file').addEventListener('change',function(e){
+    var seen={};tracks.forEach(function(t){seen[t.file.name+t.file.size]=1});
+    Array.prototype.forEach.call(e.target.files,function(f){
+      var ok=(f.type&&f.type.indexOf('audio')===0)||/\.(mp3|m4a|ogg|wav|flac)$/i.test(f.name),k=f.name+f.size;
+      if(ok&&!seen[k]){seen[k]=1;var t=clean(f.name);tracks.push({file:f,title:t,low:t.toLowerCase()})}
+    });
+    var p=cur>=0?tracks[cur]:null;
+    tracks.sort(function(x,y){return x.title.localeCompare(y.title)});
+    if(p)cur=tracks.indexOf(p);
+    e.target.value='';shown=60;open=true;render();
+  });
+
+  function render(){
+    $('n').textContent=tracks.length;
+    $('hint').classList.toggle('hide',tracks.length>0);
+    var ul=$('res');ul.textContent='';
+    if(!tracks.length||!open){ul.classList.add('hide');return}
+    ul.classList.remove('hide');
+    var q=query.toLowerCase(),list=[];
+    for(var i=0;i<tracks.length;i++){if(!q||tracks[i].low.indexOf(q)>-1)list.push(i)}
+    var f=document.createDocumentFragment();
+    list.slice(0,shown).forEach(function(i){
+      var li=document.createElement('li'),b=document.createElement('button');
+      b.textContent=tracks[i].title;b.dataset.i=i;if(i===cur)b.className='cur';
+      li.appendChild(b);f.appendChild(li);
+    });
+    if(!list.length){var n=document.createElement('li');n.className='none';n.textContent='Aucun résultat';f.appendChild(n)}
+    if(list.length>shown){var m=document.createElement('li');m.className='more';var mb=document.createElement('button');mb.id='more';mb.textContent='Afficher la suite';m.appendChild(mb);f.appendChild(m)}
+    ul.appendChild(f);
+  }
+  $('res').addEventListener('click',function(e){
+    if(e.target.id==='more'){shown+=60;render();return}
+    var b=e.target.closest('button[data-i]');if(b){open=false;play(+b.dataset.i);render()}
+  });
+  var tm;
+  $('q').addEventListener('focus',function(){open=true;render()});
+  $('q').addEventListener('input',function(e){clearTimeout(tm);tm=setTimeout(function(){query=e.target.value.trim();shown=60;open=true;render();links()},200)});
+  document.addEventListener('click',function(e){if(open&&!$('sec').contains(e.target)){open=false;render()}});
+
+  /* audio + visualiseur */
+  var ac,anA,anM,micS,micNode,radar=false,raf=0,cv=$('cv'),cx=cv.getContext('2d');
+  function ensure(){
+    if(ac){if(ac.state==='suspended')ac.resume();return}
+    var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+    try{ac=new AC();var s=ac.createMediaElementSource(a);anA=ac.createAnalyser();anA.fftSize=256;s.connect(anA);anA.connect(ac.destination)}catch(x){ac=null}
+  }
+  function size(){var d=window.devicePixelRatio||1,w=cv.clientWidth,h=cv.clientHeight;cv.width=w*d;cv.height=h*d;cx.setTransform(d,0,0,d,0,0);draw()}
+  function draw(){
+    var w=cv.clientWidth,h=cv.clientHeight;cx.clearRect(0,0,w,h);
+    var an=radar?anM:(!a.paused?anA:null),data=null;
+    if(an){data=new Uint8Array(an.frequencyBinCount);an.getByteFrequencyData(data)}
+    var N=Math.max(8,Math.min(30,Math.floor((w/2-130)/9))),r=$('vinyl').offsetWidth/2+26,mid=w/2,g=cx.createLinearGradient(0,0,0,h);
+    g.addColorStop(0,'#ffb52e');g.addColorStop(1,'#ff6a1f');cx.fillStyle=g;
+    for(var i=0;i<N;i++){
+      var v=data?data[Math.floor(i*data.length*0.55/N)]/255:(0.14+0.2*Math.abs(Math.sin(i*1.7))*(1-i/N));
+      var bh=Math.max(5,v*h*0.85*(1-i/N*0.35)),x=r+i*9;
+      cx.fillRect(mid+x,(h-bh)/2,4,bh);cx.fillRect(mid-x-4,(h-bh)/2,4,bh);
+    }
+  }
+  function loop(){draw();raf=(radar||!a.paused)?requestAnimationFrame(loop):0}
+  function kick(){if(!raf)raf=requestAnimationFrame(loop)}
+  window.addEventListener('resize',size);size();
+
+  function play(i){
+    if(i<0||i>=tracks.length)return;
+    if(radar)radarOff();
+    ensure();if(url)URL.revokeObjectURL(url);
+    cur=i;url=URL.createObjectURL(tracks[i].file);a.src=url;
+    var p=a.play();if(p&&p.catch)p.catch(function(){});
+    $('np').textContent=tracks[i].title;links();
+    if('mediaSession' in navigator){try{navigator.mediaSession.metadata=new MediaMetadata({title:tracks[i].title,artist:'Disco Soul Funk'})}catch(x){}}
+  }
+  function next(){if(!tracks.length)return;shuffle?play(Math.floor(Math.random()*tracks.length)):play((cur+1)%tracks.length)}
+  function prev(){if(!tracks.length)return;if(a.currentTime>3)a.currentTime=0;else play((cur-1+tracks.length)%tracks.length)}
+  $('play').addEventListener('click',function(){if(cur<0){if(tracks.length)play(0);return}if(a.paused){ensure();a.play()}else a.pause()});
+  $('next').addEventListener('click',next);$('prev').addEventListener('click',prev);
+  $('shuf').addEventListener('click',function(){shuffle=!shuffle;this.classList.toggle('on',shuffle)});
+  a.addEventListener('play',function(){$('play').textContent='⏸';$('vinyl').classList.add('spin');kick()});
+  a.addEventListener('pause',function(){$('play').textContent='▶';$('vinyl').classList.remove('spin')});
+  a.addEventListener('ended',next);
+  a.addEventListener('error',function(){if(cur>=0&&tracks.length>1)setTimeout(next,400)});
+  a.addEventListener('timeupdate',function(){$('t1').textContent=fmt(a.currentTime);$('t2').textContent=fmt(a.duration);if(a.duration)$('seek').value=Math.round(a.currentTime/a.duration*1000)});
+  $('seek').addEventListener('input',function(){if(a.duration)a.currentTime=this.value/1000*a.duration});
+  if('mediaSession' in navigator){try{navigator.mediaSession.setActionHandler('nexttrack',next);navigator.mediaSession.setActionHandler('previoustrack',prev)}catch(x){}}
+
+  /* radar : écoute par le micro */
+  function radarOff(){
+    radar=false;$('radar').classList.remove('on');$('rt').textContent='Activer le radar';
+    if(micNode)micNode.getTracks().forEach(function(t){t.stop()});
+    if(micS)try{micS.disconnect()}catch(x){}
+    micNode=null;micS=null;$('st').textContent='';draw();
+  }
+  $('radar').addEventListener('click',function(){
+    if(radar){radarOff();return}
+    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){$('st').textContent='Le micro n’est pas disponible ici.';return}
+    a.pause();ensure();
+    navigator.mediaDevices.getUserMedia({audio:true}).then(function(s){
+      micNode=s;radar=true;
+      if(ac){anM=ac.createAnalyser();anM.fftSize=256;micS=ac.createMediaStreamSource(s);micS.connect(anM)}
+      $('radar').classList.add('on');$('rt').textContent='Radar actif';
+      $('st').textContent='Le radar écoute. Pour identifier le titre, touchez Shazam ou SoundHound.';kick();
+    }).catch(function(){$('st').textContent='Micro refusé : autorisez-le dans Chrome pour utiliser le radar.'});
+  });
+  links();
+})();
+</script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})}</script>
+</body>
+</html>

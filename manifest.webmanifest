@@ -1,0 +1,33 @@
+{
+  "id": "./",
+  "name": "Disco Soul Funk",
+  "short_name": "Disco Soul Funk",
+  "description": "Lecteur de MP3 locaux avec passerelle vers Spotify, Deezer, Discogs et plus.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#2a1308",
+  "theme_color": "#2a1308",
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
