@@ -66,6 +66,14 @@ input[type=range]{flex:1;accent-color:var(--or);height:28px}
 .g{display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:var(--cream);font-weight:700;font-size:13px}
 .tile{width:76px;height:64px;border-radius:14px;background:#f6e6c8;border:2.5px solid #b5611f;display:grid;place-items:center;box-shadow:0 3px 0 #6d3510}
 .tile svg{width:46px;height:46px}
+
+.rbox{margin-top:10px;padding:12px;text-align:center;border:1.5px solid var(--or);border-radius:12px;background:rgba(0,0,0,.35)}
+.rbox b{color:var(--gold);font-size:18px;overflow-wrap:anywhere}
+.rbox p,.keyrow p{color:var(--dim);font-size:13px;margin:6px 0;width:100%}
+.add2{background:var(--or);color:var(--dark);font-weight:800;border-radius:12px;padding:0 16px;min-height:46px}
+.lnk{background:transparent;color:var(--dim);text-decoration:underline;min-height:40px}
+.keyrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.keyrow input{flex:1;min-width:0;font:inherit;padding:12px;border-radius:12px;border:1.5px solid var(--line);background:rgba(0,0,0,.35);color:var(--gold)}
 </style>
 </head>
 <body>
@@ -98,6 +106,9 @@ input[type=range]{flex:1;accent-color:var(--or);height:28px}
     </div>
     <button class="radar" id="radar"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg><span id="rt">Activer le radar</span></button>
     <p id="st"></p>
+    <div id="rbox" class="rbox hide"><b id="res2"></b><p>Les boutons de la passerelle cherchent ce titre.</p><button class="add2" id="rsearch">Chercher dans mes MP3</button></div>
+    <p style="text-align:center;margin:8px 0 0"><button id="keybtn" class="lnk">Clé AudD</button></p>
+    <div id="keyrow" class="keyrow hide"><input id="key" placeholder="api_token" autocomplete="off" aria-label="Clé AudD"><button id="keysave" class="add2">Enregistrer</button><p>Créez un compte gratuit sur audd.io et collez ici votre « api_token ». Il reste sur cet appareil.</p></div>
   </section>
 
   <section class="panel">
@@ -126,7 +137,7 @@ input[type=range]{flex:1;accent-color:var(--or);height:28px}
     'g-yt':['https://www.youtube.com/results?search_query=','https://www.youtube.com/'],
     'g-sh':[null,'https://www.shazam.com/'],'g-sd':[null,'https://www.soundhound.com/']};
   function links(){
-    var t=cur>=0?tracks[cur].title:$('q').value.trim(),e=encodeURIComponent(t);
+    var t=found||(cur>=0?tracks[cur].title:$('q').value.trim()),e=encodeURIComponent(t);
     for(var id in G){$(id).href=(t&&G[id][0])?G[id][0]+e:G[id][1]}
   }
   function clean(n){return n.replace(/\.[^.]+$/,'').replace(/_/g,' ').replace(/^\s*\d{1,3}\s*[-.)]\s*/,'').replace(/\s+/g,' ').trim()}
@@ -168,7 +179,7 @@ input[type=range]{flex:1;accent-color:var(--or);height:28px}
   });
   var tm;
   $('q').addEventListener('focus',function(){open=true;render()});
-  $('q').addEventListener('input',function(e){clearTimeout(tm);tm=setTimeout(function(){query=e.target.value.trim();shown=60;open=true;render();links()},200)});
+  $('q').addEventListener('input',function(e){found='';$('rbox').classList.add('hide');clearTimeout(tm);tm=setTimeout(function(){query=e.target.value.trim();shown=60;open=true;render();links()},200)});
   document.addEventListener('click',function(e){if(open&&!$('sec').contains(e.target)){open=false;render()}});
 
   /* audio + visualiseur */
@@ -199,6 +210,7 @@ input[type=range]{flex:1;accent-color:var(--or);height:28px}
     if(i<0||i>=tracks.length)return;
     if(radar)radarOff();
     ensure();if(url)URL.revokeObjectURL(url);
+    found='';$('rbox').classList.add('hide');
     cur=i;url=URL.createObjectURL(tracks[i].file);a.src=url;
     var p=a.play();if(p&&p.catch)p.catch(function(){});
     $('np').textContent=tracks[i].title;links();
@@ -217,23 +229,63 @@ input[type=range]{flex:1;accent-color:var(--or);height:28px}
   $('seek').addEventListener('input',function(){if(a.duration)a.currentTime=this.value/1000*a.duration});
   if('mediaSession' in navigator){try{navigator.mediaSession.setActionHandler('nexttrack',next);navigator.mediaSession.setActionHandler('previoustrack',prev)}catch(x){}}
 
-  /* radar : écoute par le micro */
+  /* radar : écoute + reconnaissance AudD */
+  var found='',foundTitle='',listening=false,KEY='audd_token';
+  function getKey(){try{return localStorage.getItem(KEY)||''}catch(x){return ''}}
+  function setKey(v){try{localStorage.setItem(KEY,v)}catch(x){}}
+  function say(t){$('st').textContent=t}
+  function show(f,t){found=f;foundTitle=t;$('res2').textContent=f;$('rbox').classList.toggle('hide',!f);links()}
   function radarOff(){
     radar=false;$('radar').classList.remove('on');$('rt').textContent='Activer le radar';
     if(micNode)micNode.getTracks().forEach(function(t){t.stop()});
     if(micS)try{micS.disconnect()}catch(x){}
-    micNode=null;micS=null;$('st').textContent='';draw();
+    micNode=null;micS=null;draw();
   }
+  function identify(blob,type){
+    var fd=new FormData();
+    fd.append('api_token',getKey());
+    fd.append('file',blob,'radar.'+(type.indexOf('mp4')>-1?'m4a':'webm'));
+    fetch('https://api.audd.io/',{method:'POST',body:fd}).then(function(r){return r.json()}).then(function(j){
+      if(j.status==='success'&&j.result){
+        var t=j.result.title||'',ar=j.result.artist||'';
+        show(ar?ar+' - '+t:t,t);say('');
+      }else if(j.status==='success'){
+        say('Titre non reconnu. Rapprochez l’appareil de la source et réessayez.');
+      }else{
+        say('Erreur du service : '+((j.error&&j.error.error_message)||'inconnue'));
+      }
+    }).catch(function(){
+      say('Impossible de contacter le service (internet, ou blocage par le navigateur).');
+    }).then(function(){listening=false});
+  }
+  $('keybtn').addEventListener('click',function(){$('key').value=getKey();$('keyrow').classList.toggle('hide')});
+  $('keysave').addEventListener('click',function(){
+    setKey($('key').value.trim());$('keyrow').classList.add('hide');say('Clé enregistrée. Touchez « Activer le radar ».');
+  });
+  $('rsearch').addEventListener('click',function(){
+    $('q').value=foundTitle;query=foundTitle;shown=60;open=true;render();links();
+  });
   $('radar').addEventListener('click',function(){
-    if(radar){radarOff();return}
-    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){$('st').textContent='Le micro n’est pas disponible ici.';return}
-    a.pause();ensure();
+    if(listening)return;
+    if(!getKey()){$('keyrow').classList.remove('hide');say('Collez d’abord votre clé AudD, puis touchez Enregistrer.');return}
+    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||!window.MediaRecorder){say('Ce navigateur ne permet pas d’enregistrer avec le micro.');return}
+    a.pause();ensure();show('','');
     navigator.mediaDevices.getUserMedia({audio:true}).then(function(s){
-      micNode=s;radar=true;
-      if(ac){anM=ac.createAnalyser();anM.fftSize=256;micS=ac.createMediaStreamSource(s);micS.connect(anM)}
-      $('radar').classList.add('on');$('rt').textContent='Radar actif';
-      $('st').textContent='Le radar écoute. Pour identifier le titre, touchez Shazam ou SoundHound.';kick();
-    }).catch(function(){$('st').textContent='Micro refusé : autorisez-le dans Chrome pour utiliser le radar.'});
+      listening=true;radar=true;micNode=s;
+      if(ac){try{anM=ac.createAnalyser();anM.fftSize=256;micS=ac.createMediaStreamSource(s);micS.connect(anM)}catch(x){}}
+      $('radar').classList.add('on');$('rt').textContent='Écoute en cours…';
+      say('Le radar écoute… gardez l’appareil près de la musique (10 secondes).');kick();
+      var mt=MediaRecorder.isTypeSupported('audio/mp4')?'audio/mp4':(MediaRecorder.isTypeSupported('audio/webm')?'audio/webm':'');
+      var rec=mt?new MediaRecorder(s,{mimeType:mt}):new MediaRecorder(s),chunks=[];
+      rec.ondataavailable=function(e){if(e.data&&e.data.size)chunks.push(e.data)};
+      rec.onstop=function(){
+        var type=rec.mimeType||mt||'audio/webm';
+        radarOff();say('Identification en cours…');
+        identify(new Blob(chunks,{type:type}),type);
+      };
+      rec.start();
+      setTimeout(function(){if(rec.state!=='inactive')rec.stop()},10000);
+    }).catch(function(){say('Micro refusé : autorisez-le dans les réglages du navigateur.')});
   });
   links();
 })();
